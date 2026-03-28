@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import NotificationItem from "../Components/NotificationItem";
+import { getOrders } from "../services/api";
+
+const API_BASE_URL = 'https://order-management-1-9jl1.onrender.com/api';
 
 function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
@@ -9,7 +12,7 @@ function NotificationsPage() {
 
   const fetchSystemStats = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/stats");
+      const response = await fetch(`${API_BASE_URL}/stats`);
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
@@ -134,19 +137,7 @@ function NotificationsPage() {
   const fetchNotifications = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/api/orders");
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error(result.error || "Failed to fetch data");
-      }
-
-      const orders = result.data || [];
+      const orders = await getOrders();
       const generatedNotifications = generateNotificationsFromOrders(orders, stats);
       setNotifications(generatedNotifications);
       setError(null);

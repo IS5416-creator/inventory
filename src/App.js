@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { isAuthenticated } from "./services/api";
 import { useEffect, useState } from "react";
+import { NotificationProvider } from "./context/NotificationContext";
 
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
@@ -14,6 +15,7 @@ import Register from "./pages/Registration";
 import ResetPassword from "./pages/ResetPass";
 import CustomersPage from "./pages/CustomersPage";
 import Terms from "./pages/Terms";
+import NotificationsPage from "./pages/NotificationsPage";
 
 const ProtectedRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -334,14 +336,25 @@ function App() {
           } 
         />
         
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             <Navigate to="/" replace />
-          } 
+          }
         />
-        
-        <Route 
+
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <NotificationsPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/orders" 
           element={
             <ProtectedRoute>

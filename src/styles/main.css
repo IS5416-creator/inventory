@@ -14,7 +14,7 @@ body {
   min-height: 100vh;
 }
 
-.sidebar {
+.sidebar-old {
   width: 230px;
   background: #0f172a;
   color: white;
@@ -146,7 +146,7 @@ button {
 }
 
 button:hover {
-  opacity: 0;
+  background: #1d4ed8;
 }
 
 .container {

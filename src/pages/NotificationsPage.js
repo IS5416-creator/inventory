@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import NotificationItem from "../Components/NotificationItem";
+import { getOrders, getStats } from "../services/api";
 
 function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
@@ -9,12 +10,9 @@ function NotificationsPage() {
 
   const fetchSystemStats = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/stats");
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setStats(result.data);
-        }
+      const statsData = await getStats();
+      if (statsData && Object.keys(statsData).length > 0) {
+        setStats(statsData);
       }
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -134,19 +132,8 @@ function NotificationsPage() {
   const fetchNotifications = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/api/orders");
+      const orders = await getOrders();
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error(result.error || "Failed to fetch data");
-      }
-
-      const orders = result.data || [];
       const generatedNotifications = generateNotificationsFromOrders(orders, stats);
       setNotifications(generatedNotifications);
       setError(null);

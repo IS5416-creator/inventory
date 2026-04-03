@@ -1,19 +1,26 @@
 function StatusBadge({ status }) {
   const getStatusStyle = () => {
-    switch(status) {
-      case 'Completed':
+    const normalizedStatus = status?.toLowerCase();
+    switch(normalizedStatus) {
+      case 'completed':
         return {
           backgroundColor: '#d4edda',
           color: '#155724',
           border: '1px solid #c3e6cb'
         };
-      case 'Pending':
+      case 'pending':
         return {
           backgroundColor: '#fff3cd',
           color: '#856404',
           border: '1px solid #ffeaa7'
         };
-      case 'Cancelled':
+      case 'processing':
+        return {
+          backgroundColor: '#cfe2ff',
+          color: '#084298',
+          border: '1px solid #b6d4fe'
+        };
+      case 'cancelled':
         return {
           backgroundColor: '#f8d7da',
           color: '#721c24',
@@ -29,13 +36,14 @@ function StatusBadge({ status }) {
   };
 
   const style = getStatusStyle();
+  const displayStatus = status?.charAt(0).toUpperCase() + status?.slice(1).toLowerCase();
 
   return (
-    <span 
+    <span
       className="status-badge"
       style={style}
     >
-      {status}
+      {displayStatus}
     </span>
   );
 }
